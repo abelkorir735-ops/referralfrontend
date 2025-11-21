@@ -876,20 +876,20 @@
             const level3Income = userData.rewards.filter(r => r.level === 3).reduce((sum, r) => sum + parseFloat(r.reward_amount || 0), 0);
 
             document.getElementById('teamSize').textContent = userData.referrals.length;
-            document.getElementById('teamRecharge').textContent = '$' + (userData.user.totalDeposits || 0).toFixed(2);
-            document.getElementById('teamWithdrawal').textContent = '$' + (userData.user.totalEarnings || 0).toFixed(2);
+            document.getElementById('teamRecharge').textContent = '$' + parseFloat(userData.user.totalDeposits || 0).toFixed(2);
+            document.getElementById('teamWithdrawal').textContent = '$' + parseFloat(userData.user.totalEarnings || 0).toFixed(2);
             document.getElementById('newTeam').textContent = userData.referrals.length;
-            document.getElementById('firstRecharge').textContent = userData.referrals.filter(r => r.total_deposits > 0).length;
+            document.getElementById('firstRecharge').textContent = userData.referrals.filter(r => parseFloat(r.total_deposits || 0) > 0).length;
             document.getElementById('firstWithdrawal').textContent = '0';
 
             document.getElementById('level1Count').textContent = `${level1Refs.length}/${level1Refs.length}`;
-            document.getElementById('level1Income').textContent = level1Income.toFixed(2);
+            document.getElementById('level1Income').textContent = '$' + level1Income.toFixed(2);
             
             document.getElementById('level2Count').textContent = `${level2Refs.length}/${level2Refs.length}`;
-            document.getElementById('level2Income').textContent = level2Income.toFixed(2);
+            document.getElementById('level2Income').textContent = '$' + level2Income.toFixed(2);
             
             document.getElementById('level3Count').textContent = `${level3Refs.length}/${level3Refs.length}`;
-            document.getElementById('level3Income').textContent = level3Income.toFixed(2);
+            document.getElementById('level3Income').textContent = '$' + level3Income.toFixed(2);
         }
 
         function copyCode() {
