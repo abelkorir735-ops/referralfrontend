@@ -557,6 +557,14 @@
                 </div>
             </div>
 
+            <div class="email-section">
+                <label class="email-label">Referral Code (Optional)</label>
+                <div class="email-input-group">
+                    <input type="text" id="referralCodeInput" class="email-input" placeholder="Enter referral code if you have one" style="display: block;">
+                </div>
+                <p style="font-size: 11px; color: #888; margin-top: 8px;">Leave blank if you don't have a referral code</p>
+            </div>
+
             <p class="question-text">Confirm this email to access your referral account</p>
 
             <button class="modal-btn" id="continueBtn" onclick="loadReferralData()">
@@ -758,6 +766,12 @@
                 document.getElementById('emailDisplay').textContent = 'user@example.com';
                 document.getElementById('emailInput').value = 'user@example.com';
             }
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const refCode = urlParams.get('ref') || urlParams.get('code') || urlParams.get('referral');
+            if (refCode) {
+                document.getElementById('referralCodeInput').value = refCode;
+            }
         };
 
         function toggleEditEmail() {
@@ -803,14 +817,22 @@
                 const response = await fetch(`${API_URL}/user/${encodeURIComponent(currentUserEmail)}`);
                 
                 if (response.status === 404) {
+                    const referralCodeInput = document.getElementById('referralCodeInput').value.trim();
+                    
+                    const requestBody = { email: currentUserEmail };
+                    if (referralCodeInput) {
+                        requestBody.referralCode = referralCodeInput;
+                    }
+                    
                     const registerResponse = await fetch(`${API_URL}/register`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: currentUserEmail })
+                        body: JSON.stringify(requestBody)
                     });
 
                     if (!registerResponse.ok) {
-                        throw new Error('Failed to register user');
+                        const errorData = await registerResponse.json();
+                        throw new Error(errorData.error || 'Failed to register user');
                     }
 
                     const registerData = await registerResponse.json();
@@ -833,7 +855,7 @@
                 
             } catch (error) {
                 console.error('Error:', error);
-                showToast('Failed to load referral data. Please try again.');
+                showToast(error.message || 'Failed to load referral data. Please try again.');
                 continueBtn.disabled = false;
                 continueBtn.textContent = 'Visit My Referral Account';
             }
