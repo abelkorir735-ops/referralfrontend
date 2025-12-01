@@ -401,19 +401,6 @@
         const API_URL = 'https://referralbackend-62a4.onrender.com/api';
         let currentUserEmail = null;
 
-        function getUrlParameter(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
-
-        window.addEventListener('DOMContentLoaded', function() {
-            const refCode = getUrlParameter('ref');
-            if (refCode) {
-                document.getElementById('referralCodeInput').value = refCode;
-                showSuccess(`Referral code ${refCode} has been applied! Enter your email to register.`);
-            }
-        });
-
         document.getElementById('submitBtn').addEventListener('click', handleSubmit);
         document.getElementById('copyBtn').addEventListener('click', copyReferralLink);
         document.getElementById('copyCodeBtn').addEventListener('click', copyReferralCode);
